@@ -1,0 +1,279 @@
+/*
+Four rooms arranged in a square, two agents, m and f.
+
+All queries referred to in the report are defined:
+do a '?- queries.' to see them.
+
+This has policies, and both agent-specific and 'global' norms.
+*/
+
+%%%%% VARIABLES
+
+Ag,OtherAg :: agent(Ag).
+M :: male(M).
+F :: female(F).
+Room,OtherRoom,RoomTo,RoomFrom :: room(Room).
+Dir,OtherDir :: direction(Dir).
+
+%%%%% THINGS
+
+agent(M).
+agent(F).
+
+male(m).
+female(f).
+
+room(top_left).
+room(top_right).
+room(bot_left).
+room(bot_right).
+
+direction(clockwise).
+direction(anti).
+
+% adj(Dir, Room1, Room2) means [going Dir from Room1 gets you to Room2]
+
+adj(Direction, RoomF, RoomT) :-
+ ord_basic_adj(Direction, RoomF, RoomT).
+adj(Direction, RoomF, RoomT) :-
+ opp_dir(OppDir, Direction),
+ ord_basic_adj(OppDir, RoomT, RoomF).
+
+ord_basic_adj(anti, top_left, bot_left).
+ord_basic_adj(anti, bot_left, bot_right).
+ord_basic_adj(anti, bot_right, top_right).
+ord_basic_adj(anti, top_right, top_left).
+
+opp_dir(anti, clockwise).
+
+%%%%% SIGNATURE
+
+fc(Ag^loc).
+sdfc(alone(M,F)).
+sdfc(alone(Ag)).
+oblpac(Ag^move^Dir).
+
+% for norms
+
+% domains
+
+domain(Ag^loc, Room).
+
+%%%%% CAUSAL LAWS
+
+inertial FC :-
+ fc(FC).
+
+% moving somewhere puts you there
+
+Ag^move^Direction causes Ag^loc=RoomT if Ag^loc=RoomF :-
+ adj(Direction, RoomF, RoomT).
+
+% you cannot request to move to rooms not adjacent
+
+nonexecutable req(Ag^move^Dir) if Ag^loc=Room :-
+ \+ adj(Dir, Room, _).
+
+% you cannot request to move in two directions at once
+
+nonexecutable Ag^req(move^Dir) & Ag^req(move^OtherDir) :-
+ Dir @< OtherDir.
+
+% only one agent moves at once through a doorway
+% ...(in the same direction)
+
+nonexecutable Ag^move^Dir & OtherAg^move^Dir if Ag^loc=Room & OtherAg^loc=Room :-
+ Ag @< OtherAg.
+
+% ...(in opposite directions)
+
+nonexecutable Ag^move^D & OtherAg^move^OD if Ag^loc=OR & OtherAg^loc=R :-
+ Ag @< OtherAg,
+ adj(D, OR, R),
+ opp_dir(D, OD).
+
+% togther alone
+
+default alone(M, F) if M^loc=Room & F^loc=Room.
+
+caused -alone(M, F) if M^loc=Room & F^loc=OtherRoom :-
+ Room \= OtherRoom.
+     
+caused -alone(M, F) if M^loc=Room & F^loc=Room & Ag^loc=Room :-
+ M \= Ag,
+ F \= Ag.
+
+% very alone
+
+default alone(Ag).
+
+caused -alone(Ag) if Ag^loc=Room & OtherAg^loc=Room :-
+ Ag \= OtherAg.
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+%
+% policies
+
+%pdp_transparent.
+pol_abbrev(X > Y, X join ((neg (X join (not X))) meet Y) ).
+
+top pol is (((pmenrestrict) > pmen) join (pfemstay > pfem)).
+
+pmen @ {
+ % Men are allowed to go anywhere
+ perm(M^move^Dir) if M^loc=R :-
+  adj(Dir, R, _)
+}.
+
+pmenrestrict @ {
+ % Men may not go clockwise into the top-left room
+ denied(M^move^clockwise) if M^loc=R :-
+  adj(clockwise, R, top_left)
+}.
+
+pfem @ {
+ % Women may go into any room where there is currently no man
+ perm(F^move^Dir) if F^loc=R & -(M^loc=NewR) :-
+  adj(Dir, R, NewR)
+}.
+
+pfemstay @ {
+ % If there is no man each side of her and she is alone, a woman must stay put
+ denied(F^move^Dir) if alone(F) & -(M^loc=R) & -(M^loc=RR) & F^loc=RF :-
+  adj(anti, RF, R),
+  adj(clockwise, RF, RR)
+}.
+
+caused obl(F^move^anti) if F^loc=top_right.
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+%
+% Norms: norms of state
+
+notpermitted alone(M, F).
+
+% agent-specific norms
+
+m notpermitted -(M^move^anti) & -(M^move^clockwise) if M^loc=Room & F^loc=Room.
+%local_global.
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+%
+% Queries
+%
+% define:
+%  query/3 [query(Id, Times, QueryList)]
+
+% parameterized location query
+
+query(l(MLoc, FLoc), 1, [0:m^loc=MLoc, 0:f^loc=FLoc]).
+
+% transitions into a red state:
+
+query(tored, 1, [1:status=red]).
+
+%%%%%%%% queries from the paper
+
+%%%%% Normative status
+
+query(ns1, 0, [0:status=red,0:m^loc=top_left]).
+query(ns2, 1, [0:red(m),1:status=green]).
+query(ns3, 4, [0:m^move^anti,
+               1:m^move^anti,
+               2:m^move^anti,
+               3:m^move^anti,
+               0:status=green,
+               1:status=green,
+               2:status=green,
+               3:status=green,
+               4:status=green]).
+
+%%%%% Red transitions, agent-redness
+
+%% rtar2 should have 'local_global' commented out.
+
+query(rtar1, 1, [-(0:red(m)),-(0:red(f)),trans=red]).
+query(rtar2, 1, [0:trans=green,(0:red(m) ++ 0:red(f))]).
+
+%%%%% Planning under norms
+
+query(pun(N), N, [0:m^loc=bot_left,0:f^loc=bot_right,
+                  N:m^loc=top_left,N:f^loc=bot_left
+                  |Rest]) :-
+ get_nums(0, N, NumsList),
+ findall(Y:status=green, member(Y, NumsList), L1),
+ findall(-(Y:red(X)), (member(Y, NumsList),
+                       Y \= N,
+                       agent(X)), L2),
+ append(L1, L2, Rest).
+
+get_nums(N, N, [N]) :-
+ !.       
+
+get_nums(X, N, [X|Rest]) :-
+ X < N,
+ X1 is X + 1,
+ get_nums(X1, N, Rest).
+
+%%%%% Obligation violations
+
+query(ov(PAC), 1, [0:viol(PAC)]) :-
+ oblpac(PAC).
+
+%%%%% Policy conflicts
+
+%% need pdp_transparent for this
+
+query(pc1(P1, P2, Act), 1, [0:pdp(P1, Act)=p,0:pdp(P2, Act)=d]) :-
+ policy(P1 is P1Exp),
+ policy(P2 is P2Exp),
+ P1Exp \= neg,
+ P2Exp \= pos,
+ P1 \= P2,
+ oblpac(Act).
+
+query(pc2(P, Act), 1, [0:pdp(P, Act)=in]) :-
+ policy(P is PExp),
+ PExp \= pos,
+ PExp \= neg,
+ oblpac(Act).
+
+%%%%% Coverage gaps
+
+%%%%% Policy subsumption
+%
+% several runs of this is needed to do subsumption
+
+query(ps(P1:E1:V1,P2:E2:V2), 1, [0:pdp(P1, X)=V1,0:pdp(P2, X)=V2]) :-
+ oblpac(X),
+ policy(P1 is E1),
+ (
+  E1 = pos
+  ;
+  E1 = neg
+ ),
+ policy(P2 is E2),
+ P1 \= P2,
+ (
+  E2 = pos
+  ;
+  E2 = neg
+ ),
+ basic_policy_val(E1, V1),
+ basic_policy_val(E2, V2),
+ V1 \= na,
+ V2 \= na,
+ V1 \= V2.
+
+%%%%% simulation
+%
+% 
+
+query(sim, 0, [0:m^loc=top_left,0:f^loc=top_left]).
+
+
+
+

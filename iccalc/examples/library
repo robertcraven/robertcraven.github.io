@@ -1,0 +1,74 @@
+
+%% variables and other stuff
+
+U :: user(U).
+
+user(borges).
+%user(kant).
+
+%% subjects, actions, targets
+
+subject(U).
+subject(system).
+
+action(read).
+action(write).
+action(alter).
+
+target(catalogue).
+
+%% policy actions
+
+pac(U^read^catalogue).
+pac(U^write^catalogue).
+
+%% fluents and rest of constants
+
+fc(U:hasRead(catalogue)).
+fc(U:hasWritten(catalogue)).
+fc(U:userType(reader)).
+fc(U:userType(librarian)).
+
+ac(system^alter^catalogue).
+
+%% causal laws
+
+caused U:hasRead(catalogue) after U^read^catalogue.
+caused U:hasWritten(catalogue) after U^write^catalogue.
+
+caused -(U:hasRead(catalogue)) after system^alter^catalogue.
+
+%% policies
+
+pdp_transparent.
+pol_abbrev(X > Y, X join ((neg (X join (not X))) meet Y) ).
+
+top ptop is (l > (r_w join r_r)).
+% is (l and (r_w and r_r)).
+% is (l > (r_w and r_r)).
+% is (l > (r_w > r_r)).
+
+l @ {
+ ( perm(U^write^catalogue) if U:userType(librarian) ),
+ ( perm(U^read^catalogue) if U:userType(librarian))
+}.
+
+r_r @ {
+ perm(U^read^catalogue) if U:userType(librarian)
+}.
+
+r_w @ {
+ denied(U^write^catalogue) if U:userType(reader)
+}.
+
+%% inertia, exogeneity
+
+inertial FC :-
+ fc(FC).
+
+exogenous (system^alter^catalogue).
+
+%% norms
+
+%notpermitted U:hasRead(catalogue) & U:hasWritten(catalogue).
+

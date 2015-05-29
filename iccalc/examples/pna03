@@ -1,0 +1,42 @@
+
+% Action description AS1, Section 3.2
+% See http://www.doc.ic.ac.uk/~rac101/iccalc/pna.pdf
+%
+% This differs from the printed version: we must accommodate the non-algebraic
+% policy within out 'algebraic' implementation. The differences should be
+% obvious, and the transition system is the same.
+
+subject(left).
+subject(right).
+
+act(read).
+
+target(file).
+
+%%
+
+fc(S:hasRead(file)) :-
+ subject(S).
+
+pac(S^read^file) :-
+ subject(S).
+
+%%
+
+inertial FC :-
+ fc(FC).
+
+caused S:hasRead(file) after S^read^file :-
+ subject(S).
+
+%%
+
+top pol.
+
+pol @ {
+ perm(S^read^file) if -(S1^read^file) :-
+  subject(S),
+  subject(S1),
+  S \= S1
+}.
+

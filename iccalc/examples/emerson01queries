@@ -1,0 +1,12 @@
+
+% What are the transitions where Emerson goes to Harvard?
+
+query(eh, 1, [0:(emerson^move)=harvard]).
+
+% What transitions result in both Emerson and Thoreau being pleased, where
+% they were displeased before?
+
+query(bp, 1, [-(0:pleased(emerson)), -(0:pleased(thoreau)),
+              1:pleased(emerson), 1:pleased(thoreau)]).
+
+

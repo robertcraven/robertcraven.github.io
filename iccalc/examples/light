@@ -1,0 +1,25 @@
+
+%%%%% SIGNATURE
+
+fc(on).
+ac(switch).
+
+% domains
+
+domain(on, 0).
+domain(on, 1).
+domain(on, 2).
+
+%%%%% CAUSAL LAWS
+
+inertial FC :-
+ fc(FC).
+exogenous AC :-
+ ac(AC).
+
+% turn the light on and off
+
+switch causes on=1 if on=0.
+switch causes on=2 if on=1.
+switch causes on=0 if on=2.
+

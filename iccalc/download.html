@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+ <head>
+  <title>iCCalc and mcLUCA</title>
+  <meta name="description" content="iCCalc" />
+  <link href="http://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet" type="text/css" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+  <div id="container">
+   <div id="header">
+    <h1>iCCalc&nbsp;&nbsp;and&nbsp;&nbsp;mcLUCA</h1>
+   </div>
+   <div id="navbar">
+    <a href="./index.html">About</a>&nbsp;/&nbsp;
+    <a href="./download.html" class="current">Download</a>&nbsp;/&nbsp;
+    <a href="./tutorial.html">Tutorial</a>
+   </div>
+   <div id="content">
+    <h2>Download</h2>
+    <h3>Prerequisites</h3>
+    <p>
+     iCCalc and mcLUCA have been tested on
+     <a href="http://www.ubuntu.com/">Ubuntu</a> Linux,
+     and on Mac OS X (Leopard, Snow Leopard), but should also work
+     on many other Unix-like OSs. We are currently developing a Windows
+     version, which will be appearing very shortly.
+    </p>
+    <p>
+     iCCalc and mcLUCA need two basic pieces of software: a version of Prolog
+     and the SAT-solver clasp.
+    </p>
+    <p>
+     iCCalc and mcLUCA run under YAP Prolog, SICStus Prolog 4.1.1, and
+     SICStus Prolog 3.12.3.
+     <a href="http://www.dcc.fc.up.pt/~vsc/Yap/">YAP Prolog</a> is freely
+     avaliable, and in our experience is much quicker than SICStus.
+    </p>
+    <p>
+     The SAT-solver
+     <a href="http://www.cs.uni-potsdam.de/clasp/">clasp</a> is also
+     freely available. The solver executable should be placed in the
+     'solvers' directory for iCCalc. We have included clasp in the downloadable
+     files for iCCalcc and mcLUCA.
+    </p>
+    <p>
+     iCCalc includes the ability to visualize the labelled transition systems
+     defined using C+ as an option. To do this, the graph-drawing suite
+     <a href="http://www.graphviz.org/">graphviz</a> is needed. (This can
+     also be obtained from the Ubuntu software centre, or installed using
+     synaptic.) Transition systems are written to a postscript file and opened
+     using a user-defined viewer (default evince).
+    </p>
+    <h3>Installation</h3>
+    <p>
+     The current version of iCCalc is 3.1; the current version of mcLUCA is 1.0.
+     The files for iCCalc are in the archive:
+    </p>
+    <ul>
+     <li><a href="iccalc3-1.tar.gz">iccalc3-1.tar.gz</a></li>
+    </ul>
+    <p>
+     Unzip the archive, and place the script 'iccalc'
+     from the 'scripts' directory somewhere in your PATH. The 'iccalc'
+     script should be edited to point to the right directories; it should be
+     obvious how to do this.
+    </p>
+    <p>
+     As well as the Prolog source, the download also contains a number of
+     sample domains, with queries, to illustrate how iCCalc and mcLUCA
+     can be used. These are more fully discussed in the
+     <a href="./tutorial.html">tutorial</a>.
+    </p>
+   </div>
+   <div id="footer">
+    Robert Craven,
+    <a href="mailto:robert.craven@imperial.ac.uk">robert.craven@imperial.ac.uk</a>,
+    and 
+    Marek Sergot,
+    <a href="mailto:m.sergot@imperial.ac.uk">m.sergot@imperial.ac.uk</a>
+   </div>
+  </div>
+ </body>
+</html>

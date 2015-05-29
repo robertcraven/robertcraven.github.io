@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+ <head>
+  <title>iCCalc and mcLUCA</title>
+  <meta name="description" content="iCCalc" />
+  <link href="http://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet" type="text/css" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+  <div id="container">
+   <div id="header">
+    <h1>iCCalc&nbsp;&nbsp;and&nbsp;&nbsp;mcLUCA</h1>
+   </div>
+   <div id="navbar">
+    <a href="./index.html">About</a>&nbsp;/&nbsp;
+    <a href="./download.html">Download</a>&nbsp;/&nbsp;
+    <a href="./tutorial.html" class="current">Tutorial</a>
+   </div>
+   <div id="content">
+    <h2>Tutorial</h2>
+    <p>
+     Note: this tutorial doesn't stand alone. It will be much clearer after a
+     reading of the defining paper on C+,
+     <a href="http://www.cs.utexas.edu/users/vl/papers/nmct.ps">Nonmonotonic
+     Causal Theories</a> by Giunchiglia, Lee, Lifschitz, McCain and Turner.
+    </p>
+    <p>
+     The example action description
+     <a href="./examples/cornucopia">cornucopia</a>
+     contains examples of all input syntax accepted by iCCalc.
+     If you are not sure how to write something, or what a given bit
+     of syntax means, the answer is probably there.
+    </p>
+    <p>
+     The running example here concerns the letter-writing activities of
+     the New England Transcendentalists
+     (<a href="http://en.wikipedia.org/wiki/Transcendentalism">?</a>).
+     For more examples of iCCalc input syntax, see the files:
+     <a href="./examples/library">library</a>,
+     <a href="./examples/light">light</a>,
+     <a href="./examples/monkey">monkey</a>,
+     <a href="./examples/rooms">rooms</a>,
+     <a href="./examples/russianChambers">russianChambers</a> and
+     <a href="./examples/russianND">russianND</a>.
+    </p>
+    <h3>Running iCCalc</h3>
+    <p>
+     After <a href="./download.html">installation</a>, iCCalc can be run
+     using the script 'iccalc'. This accepts a number of command-line
+     options:
+    </p>
+    <table>
+     <tr><td>-yap</td><td>use YAP Prolog, if installed</td></tr>
+     <tr><td>-s4</td><td>use SICStus Prolog 4, if installed</td></tr>
+     <tr><td>-s3</td><td>use SICStus Prolog 3, if installed</td></tr>
+     <tr><td>-o &lt;FILE&gt;</td><td>load the option file &lt;FILE&gt;</td></tr>
+     <tr><td>-mcluca</td><td>also compile mcLUCA</td></tr>
+     <tr><td>-a &lt;FILE&gt;</td><td>if compiling mcLUCA, use &lt;FILE&gt; as definitions for annotations</td></tr>
+     <tr><td>-na</td><td>if compiling mcLUCA, do not load an annotations definition file</td></tr>
+    </table>
+    <p>
+     All additional command-line arguments are deemed to be action description
+     source files. So, if the current working directory had an action description
+     source file 'monkey', I could type
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;% iccalc monkey
+     <br /><br />
+     to start Prolog, compile iccalc, and then load the 'monkey' action
+     description.
+    </p>
+    <h3>Action Description Source Files</h3>
+    <p>
+     Action descriptions of the language C+ (see the paper
+     <a href="http://www.cs.utexas.edu/users/vl/papers/nmct.ps">Nonmonotonic
+     Causal Theories</a> by Giunchiglia, Lee, Lifschitz, McCain and Turner)
+     define labelled transition systems. Accordingly, the input files to
+     iCCalc are specifications of C+ action descriptions, where the syntax is
+     very close to C+, but with a number of convenient extra features to
+     allowing concision in the specifications. In addition, action description
+     source files can contain definitions of queries, questions that iCCalc
+     can answer about runs through the transition system. (We will call the
+     source files 'action descriptions' where this doesn't introduce
+     confusion.)
+    </p>
+    <p>
+     The labelled transition systems defined by a C+ action description are
+     graphs, whose nodes represent states of the system being modelled,
+     and whose edges represent the possible transitions between states.
+    </p>
+    <p>
+     As well as supporting action descriptions of C+, iCCalc also supports
+     action descriptions of that language's various extensions, including
+     nC+, pC+, and their combination npC+. The syntax of the source files
+     for these various languages is described below. Note that all of the
+     various extensions use the common elements of source files for C+.
+    </p>
+    <p>
+     Action descriptions can be loaded using 'loadf( )' from within iCCalc
+     or mcLUCA. The predicate reloadf/0 reloads a current version of
+     whichever files are currently loaded.
+    </p>
+    <h3>Signatures</h3>
+    <p>
+     The signatures of C+ action descriptions are multi-valued and
+     propositional, and are divided into 'fluent constants' and 'action
+     constants'. Fluent constants are used to describe properties of
+     objects and the environment; the values given to fluent constants
+     determine what state the system is in. Action constants are used to
+     represent the actions and events, and properties of them, that can
+     occur in the system.
+    </p>
+    <p>
+     As an example, we will consider a domain where two agents,
+     Emerson and Thoreau, can move between two locations, Harvard and Walden.
+     Emerson and Thoreau can be pleased or not, and their emotional state can
+     either be turbulent, or not. As well as moving between locations, they
+     can write to one another. There are six fluent constants, which can be
+     specified as follows:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;fc(loc(A)) :- agent(A).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;fc(pleased(A)) :- agent(A).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;fc(turbulent(A)) :- agent(A).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;agent(emerson).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;agent(thoreau).<br />
+     <br />
+     Fluent constants can be Boolean or not. If they are Boolean, there is no
+     need to declare their domain, but if they are non-Boolean, then it is
+     necessary to say what values the constants can take. The constants
+     'pleased( )' and 'turbulent( )' are Boolean: an agent is either pleased
+     or not, and turbulent or not. The constant 'loc( )' is non-Boolean, and
+     we declare its domain thus:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;domain(loc(A), L) :- agent(A), location(L).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;location(harvard).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;location(walden).<br />
+     <br />
+     The action constants and their domains are specified as follows:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;ac(A^move) :- agent(A).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;ac(A^writeTo^A1) :- agent(A), agent(A1), A \= A1.<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;domain(A^move, L) :- agent(A), location(L).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;domain(A^move, ff) :- agent(A).<br />
+     <br />
+     The domain declarations for 'move' mean that an agent can either move
+     to a location, or else not move at all (stand still).
+    </p>
+    <p>
+     Statically-determined fluent constants are declared using facts of
+     the predicate sdfc/1, along the same lines as fc/1, above.
+    </p>
+    <p>
+     The predicates agent/1 and location/1, above, are user-defined. iCCalc
+     allows the user to use arbitrary Prolog clauses in the definitions of
+     signatures, causal laws and queries. This increases the concision of
+     action description source files. (Another source of concision is
+     the use of variables: see below.)
+    </p>
+    <h3>Causal Laws</h3>
+    <p>
+     Causal laws in C+ are of three types: static, dynamic, and action.
+     There are a number of abbreviations for commonly-used forms of the
+     various kinds of law.
+    </p>
+    <p>
+     It is common to declare all or some fluent constants as inertial: the
+     values of these fluent constants persist, by default, as the system
+     changes. In our example action description, we have:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;inertial(FC) :- fc(FC).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;exogenous(AC) :- ac(FC).<br />
+     <br />
+     The 'exogenous' declaration means that action constants can take on any
+     value in a transition (unless prevented from doing so by other causal
+     laws).
+     <br />
+     The other causal laws of the action description are:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;caused loc(A)=L after A^move=L :- agent(A), location(L).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;nonexecutable A^move=L if loc(A)=L :- agent(A), location(L).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;caused pleased(A1) after A^writeTo^A1 :- agent(A), agent(A1), A \= A1.<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;caused -turbulent(A) after A^writeTo^A1 :- agent(A), agent(A1), A \= A1.<br />
+     <br />
+     The first law states that the location of an agent is L, after the agent
+     moves to that location. The second states that an agent cannot move to
+     a location if he is already there. The third law states that an agent
+     is pleased after somebody else writes to him. The fourth states that
+     an agent is no longer turbulent after he has written to someone else.
+    </p>
+    <h3>Variables</h3>
+    <p>
+     The repeated presence of 'agent(A)' and 'location(L)' in the bodies of
+     the clauses above can be avoided by declaring variables in the source
+     file. These have the form
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&lt;VARS&gt; :: L1,...,Ln.<br />
+     <br />
+     Where &lt;VARS&gt; is a number of variables separated by commas, with a
+     'head variable' first. For example, in our example action description
+     we can declare:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;A,A1 :: agent(A).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;L,L1 :: location(L).<br />
+     <br />
+     Now, whenever a variable 'A' appears elsewhere in the source file,
+     the clause in which it appears will be partially grounded by every
+     value of 'A' for which 'agent(A)' is true. The same will be applied
+     to every other variable after 'A' in the list: so that if 'A1' appears
+     in the source file, it will also be grounded to every agent.
+    </p>
+    <p>
+     This means, for instance, that instead of the first clause declaring
+     the 'loc( )' fluent constant, above, we can simply write:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;fc(loc(A)).<br />
+     <br />
+     The domain can be specified by:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;domain(loc(A), L).<br />
+     <br />
+     The full action description for the example so far is
+     <a href="./examples/emerson01">emerson01</a>.
+    </p>
+    <h3>User-Defined Queries</h3>
+    <p>
+     Given an action description, to query iCCalcc is to ask it to find runs
+     through the labelled transition system defined by the action description
+     that are consistent with information passed in the query. This
+     information states what must be true at various points during the run.
+    </p>
+    <p>
+     The predicate query/3 is used to specify queries in source files.
+     The first argument is an identifier, which can be any Prolog term,
+     for the query. The second is the length of the runs which will be
+     considered in solving the query. The third argument is a list
+     specifying what must be true of the run. Here is an example:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;query(eh, 1, [0:(emerson^move)=harvard]).<br />
+     <br />
+     This query defines the transitions (runs of length of 1) where Emerson
+     goes to Harvard: where the action constant 'emerson^move' has the
+     value 'harvard' at time 0. Another example:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;query(bp, 1, [-(0:pleased(emerson)),<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-(0:pleased(thoreau)),<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1:pleased(emerson),<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1:pleased(thoreau)]).<br />
+     <br />
+     This query defines transitions from states where neither is pleased,
+     to states where both agents are pleased.
+    </p>
+    <p>
+     These queries could be saved in the same source file as the action
+     description, and loaded with it, but in this example we keep them in
+     a separate file,
+     <a href="./examples/emerson01queries">emerson01queries</a>. They
+     can be loaded, together with the action description, by typing:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;% iccalc emerson01 emerson01queries<br />
+     <br />
+     After loading, the first query can be answered by typing at the Prolog
+     prompt:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;?- query eh.<br />
+     <br />
+     This will produce as output all runs through the labelled transition
+     system defined by the action description that are consistent with
+     the query information.
+    </p>
+    <p>
+     Instead of keeping queries in the source files, they can also be posed
+     on-the-fly using the query/2 predicate. This does the same work as
+     query/3, but with the first argument omitted. So after loading the
+     'emerson01' action description, it is possible to type at the Prolog
+     prompt:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;?- query(1, [0:(emerson^move)=harvard]).<br />
+     <br />
+     This then does exactly the same as 'query eh'.
+    </p>
+    <p>
+     The argument of query/2 and query/3 that specifies the length of
+     run to be considered in solving the query can also denote a range,
+     m..n, where m &lt; n. iCCalc will then try to solve the query for
+     runs of length m; if it fails, it will consider runs of length m+1; and
+     so on, up to n. In that case the prefix 'max:' can be
+     used instead of an integer to specify fluents that must be true in
+     the final state of the run. For example:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;?- query(2..4, [0:(loc(emerson)=harvard),<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max:(loc(emerson)=harvard)]).<br />
+     <br />
+     This defines runs of length 2--4 where Emerson is initially in Harvard,
+     and is in Walden at the end of the run. Since there is such a run of
+     length 2, iCCalc would output all runs of length 2 that satisfy the
+     constraints, and then stop, without considering the runs of length 3
+     and 4.
+    </p>
+    <p>
+     Prolog can occur in the body of query/3 clauses. For example:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;query(x, 1, List) :- findall(0:loc(X)=harvard, agent(X), List).<br />
+    </p>
+    <h3>Built-In Queries</h3>
+    <p>
+     There are several built-in queries:
+    </p>
+    <table>
+     <tr><td>states</td><td>Defines all states.</td></tr>
+     <tr><td>trans</td><td>Defines all transitions.</td></tr>
+     <tr><td>runs(N)</td><td>Defines all runs of length N through the transition system.</td></tr>
+    </table>
+    <p>
+     More built-in queries are added if the action description is in nC+,
+     as described below.
+    </p>
+    <h3>nC+</h3>
+    <p>
+     nC+ is described in the paper
+     <a href="http://dx.doi.org/10.1016/j.jal.2007.06.007">Agent Strands in the Action Language nC+</a>.
+     It is an extension of C+, used for representing and reasoning
+     about norm-governed systems, often norm-governed agent systems.
+     Syntactically, nC+ adds several new forms of law to C+ action
+     description; the semantic effect of these new laws is to classify
+     states, transitions, and agents' contributions to transitions as good
+     or bad, licit or illicit, and so on---which we represent as a colouring
+     of green and red. We stress: these laws do not change the structure of
+     the labelled transition system, merely the deontic classification of
+     its states and transitions.
+    </p>
+    <p>
+     To <a href="./examples/emerson01">emerson01</a> we first add the
+     state permission law:<br />
+     <br />
+     &nbsp;&nbsp;&nbsp;&nbsp;notpermitted loc(thoreau)=walden if loc(A)=walden :- A \= thoreau.<br />
+     <br />
+     This means that if another agent is at Walden, it is bad for Thoreau
+     to be there. State permission laws are written 'notpermitted F.', where
+     'F' is a conjunction of atoms, or 'notpermitted F if G', where 'F' and
+     'G' are conjunctions of atoms. 'F' must contain fluent constants only.
+     Action permission laws have the same form but 'F' should contain action
+     constants, not fluent constants.
+    </p>
+    <p>
+     Agent-specific permission laws are used to determine which behaviours
+     of an agent are green or red. For agent-specific permission laws to be
+     used, therefore, there should be a declaration of who the agents are;
+     this is done in the source file using the predicate agent/1.
+     Agent-specific permission laws then take the same form as action
+     permission laws, with the name of the agent at the front. For example:
+     <br />
+     <br />
+     &nbsp;&nbsp;&nbsp;&nbsp;agent(emerson).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;agent(thoreau).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;emerson notpermitted emerson^move=harvard & -(thoreau^move=harvard).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;thoreau notpermitted thoreau^writeTo^emerson if loc(thoreau)=walden.<br />
+     <br />
+     The first agent-specific law applies to Emerson, and states that if
+     he moves to Harvard when Thoreau isn't moving to Harvard, then Emerson
+     is doing something wrong. The second agent-specific permission law
+     applies to Thoreau: Thoreau is acting badly whenever he writes to
+     Emerson from Walden.
+    </p>
+    <p>
+     Optionally, a 'local-global' coherence can be imposed on the norms.
+     This means that whenever a transition is coloured red for a given
+     agent (because of some agent-specific permission law), the transition
+     is deemed to be red overall. This constraint is imposed by adding the
+     fact<br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;local_global.
+     <br /><br />
+     to the action description. The action description of nC+ that contains
+     all these additions is in the file
+     <a href="./examples/emerson02">emerson02</a>.
+    </p>
+    <h3>pC+</h3>
+    <p>
+     pC+ extends C+ for the representation of authorization and obligation
+     policies, and policy composition using the language PBel. (For PBel,
+     see
+     <a href="http://doi.acm.org/10.1145/1314436.1314439">A simple and expressive semantic framework for policy composition in access control</a>
+     by Bruns, Dantas and Huth.) The language pC+, with implementation
+     details and examples, is described in
+     <a href="./pna.pdf">Policies, Norms and Actions</a> by Craven. (The 
+     sample action descriptions referred to in that paper are here:
+     <a href="./examples/pna01">pna01</a>,
+     <a href="./examples/pna02">pna02</a>,
+     <a href="./examples/pna03">pna03</a>.)
+    </p>
+    <p>
+     Using pC+ necessitates a slight change in the specification of
+     signatures for action descriptions. Action constants are now divided
+     into three categories. (i) Regular action constants, declared as usual
+     using ac/1, which represent actions not controlled by policies.
+     (ii) 'Permission action constants', declared in a similar way using
+     pac/1, which represent actions controlled by authorization policies.
+     (iii) 'Obligation action constants', declared using oblpac/1, which
+     represent actions subject both to event-condition-action rules and
+     authorization policies. (We will call action constants that fall into
+     categories (ii) and (iii) 'policy action constants'.)
+    </p>
+    <p>
+     Policy action constants should take the form 'S^X', where 'S' is the
+     subject, who is performing some action 'X'. Typically 'X' itself
+     has additional structure as 'A^T', where 'A' is the name of an action
+     or operation that can be performed on a target 'T'. This extra
+     structure is not necessary, however. The policy action constants in our
+     example are specified as follows:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;ac(A^move).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;oblpac(A^writeTo^A1) :- A \= A1.<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;domain(A^move, L).<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;domain(A^move, ff).<br />
+    </p>
+    <p>
+     Policy action constants should generally not be declared as 'exogenous':
+     whether or not the action is performed depends on whether the
+     authorization policy in place allows a request for the action to pass.
+    </p>
+    <p>
+     Aside from adjustments to the signature, pC+ requires the addition of
+     several new kinds of information in source files. First, there should be
+     definitions of the basic policies: these are named policies consisting
+     of either all positive authorization rules, or negative authorization
+     rules. For example, here is a basic negative authorization policy,
+     called 'pol':
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;pol @ {<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;denied(emerson^writeTo^thoreau) if loc(emerson)=harvard<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;}.<br />
+     <br />
+     The law inside the curly brackets has a 'denied( )' constant in its
+     head, and its body is a conjunction of atoms. If more than one law
+     were included in a basic policy, this is written in the form:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;pol2 @ {<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( denied(P1) if C1 :- B1 ),<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( denied(Pn) if Cn :- Bn )<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;}.<br />
+     <br />
+     Positive authorization policies take the same form but with 'perm'
+     in the head.
+    </p>
+    <p>
+     Secondly, there should be a declaration of what the top policy is (this
+     is the policy used by the PDP to evaluate access requests). The top
+     policy is typically defined as a composition of other policies; the
+     other policies may be basic, or themselves defined in terms of more
+     policies. Here is how the top policy is declared in our example domain:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;top ptop is (pol or (neg pol)).<br />
+     <br />
+     The name of the top policy is 'ptop', and it is defined, in terms of
+     the policy 'pol', as 'pol or (neg pol)'.
+    </p>
+    <p>
+     Definitions of other policies are made using expressions of the form
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;policy P is Comp.<br />
+     <br />
+     where 'P' is the name of a policy and 'Comp' is a policy composition
+     expression, such as '(pol or (neg pol))', above. The names of negation,
+     meet and join according to truth ordering are 'not', 'and', 'or'. The
+     names of negation, meet and join according to the knowledge ordering
+     are 'neg', 'meet' and 'join'. Binary operators are infix. (See
+     <a href="">Policies, Norms and Actions</a> for more details on the
+     language.)
+    </p>
+    <p>
+     Optional abbreviations of new policy composition operators can be made
+     using the predicate pol_abbrev/2. For example, the operator '&gt;', which
+     we use often, is defined as:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;pol_abbrev(X &gt; Y, X join ((neg (X join (not X))) meet Y) ).
+     <br /><br />
+     Obligation policies (interpreted as event-condition-action rules) are
+     written straightforwardly as C+ action dynamic laws with the constant
+     'obl( )' in the head. For example:
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;caused obl(emerson^writeTo^thoreau) if turbulent(emerson).
+     <br /><br />
+     Any action in an 'obl( )' constant must be declared as 'oblpac'.
+    </p>
+    <p>
+     An optional fact
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;pdp_transparent.
+     <br /><br />
+     in the source file means that constants representing the evaluation of
+     all named policies will be included in the action description. Without
+     this fact, only the overall decision for a request is represented.
+    </p>
+    <p>
+     The file
+     <a href="./examples/emerson03">emerson03</a> contains the causal laws,
+     laws of nC+ (norms), and laws of pC+ (policies) mentioned so far.
+    </p>
+    <h3>Transition System Visualization</h3>
+    <p>
+     To visualize the transition system defined by the action description,
+     use
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;?- trans2dot.<br />
+     <br />
+     This will find all the states and transitions, write them as a .dot
+     file, run <a href="http://www.graphviz.org/">graphviz</a> on the
+     .dot file, and show the results using evince.
+    </p>
+    <p>
+     The answers to individual queries can be visualized using q2dot/1 and
+     q2dot/2. These take the same arguments as query/1 and query/2, but
+     the solutions are written to a .dot file and then shown pictorially.
+     The 'time' argument should always be 0 or 1 for visualized queries.
+    </p>
+<!--    <h3>C+timed</h3>
+    <p>
+     (To come.)
+    </p>
+--> 
+    <h3>Options and Other Utilities</h3>
+    <p>
+     There are various options that can be set and other utilities for
+     inspecting the action description currently loaded in iCCalc or mcLUCA.
+    </p>
+    <p>
+     Current values for options can be displayed by
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;?- options.<br />
+     <br />
+     A value of an option can be set using
+     <br /><br />
+     &nbsp;&nbsp;&nbsp;&nbsp;?- set_opt(OptionName, OptionValue).<br />
+     <br />
+     Information about the current action description can be shown using
+     the following predicates.
+    </p>
+    <table>
+     <tr><td>loadf/0</td><td>show information about the current file</td></tr>
+     <tr><td>agents/0</td><td>prints currently specified agents</td></tr>
+     <tr><td>signature/0</td><td>writes the signature to screen</td></tr>
+     <tr><td>show_causal_laws/0</td><td>show the causal laws of the action description</td></tr>
+     <tr><td>queries/0</td><td>writes all defined queries to screen</td></tr>
+     <tr><td>info/0</td><td>does all of the above</td></tr>
+    </table>
+   </div>
+   <div id="footer">
+    Robert Craven,
+    <a href="mailto:robert.craven@imperial.ac.uk">robert.craven@imperial.ac.uk</a>,
+    and 
+    Marek Sergot,
+    <a href="mailto:m.sergot@imperial.ac.uk">m.sergot@imperial.ac.uk</a>
+   </div>
+  </div>
+ </body>
+</html>

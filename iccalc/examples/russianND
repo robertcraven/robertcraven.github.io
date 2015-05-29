@@ -1,0 +1,67 @@
+/* Russian Roulette (non-deterministic)
+
+load means insert bullet and spin, or 
+just spin if already loaded
+
+Added: nonexecutable load if loaded
+*/
+
+
+fc(alive).
+fc(loaded).
+fc(primed).
+
+inertial alive.
+inertial loaded.
+inertial primed.
+
+caused false if primed & -loaded.
+
+
+ac(load).
+ac(shoot).
+
+exogenous load.
+exogenous shoot.
+
+
+nonexecutable load & shoot.
+nonexecutable -load & -shoot.
+
+
+% for genuine Russian Roulette
+
+nonexecutable load if -alive.
+nonexecutable shoot if -alive.
+
+% so no transitions from -alive states
+
+nonexecutable load if loaded.  % reduces transitions
+
+
+
+%%%
+
+load causes loaded.
+load maycause primed.
+load maycause -primed.
+
+shoot causes -alive if primed.
+shoot causes -loaded & -primed if primed.
+
+% shoot maycause primed if loaded & -primed.
+
+% shoot maycause primed if loaded.
+
+shoot maycause primed.
+
+
+%%%%%%%%%
+
+% % project load.
+% project shoot.
+% project alive.
+% % project loaded.
+% project primed.
+
+

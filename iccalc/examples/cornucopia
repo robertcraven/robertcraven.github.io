@@ -1,0 +1,190 @@
+
+/*
+This file contains many illustrations of the syntax for representing
+action descriptions as input to iCCalc and mcLUCA.
+
+The action description itself can be run and queried, but is nonsensical.
+
+The action description has 7680 states and >5,000,000 transitions.
+We therefore do not recommend building the entire transition system: it
+is best, when answering queries for this domain, to limit the number of
+answers returned. For example:
+
+  ?- set_opt(num_models, 5000).
+
+This option is set as above on loading. */
+
+%%%%%%%%%%
+%%%%%%%%%% VARIABLES
+
+A,A1,A2 :: agent(A).
+L,L1 :: location(L).
+G :: god(G).
+M :: monster(M).
+ChildOfZeus,ChildOfZeus1 :: (son(zeus, ChildOfZeus) ; daughter(zeus, ChildOfZeus)).
+
+%%%%%%%%%%
+%%%%%%%%%% THINGS
+
+agent(G).
+agent(M).
+
+location(olympus).
+location(thrace).
+location(hades).
+
+god(zeus).
+god(dionysus).
+god(artemis).
+god(hera).
+
+monster(cerberus).
+monster(minotaur).
+
+son(zeus, dionysus).
+daughter(zeus, artemis).
+
+%%%%%%%%%%
+%%%%%%%%%% SIGNATURE
+
+fc(loc(A)).
+domain(loc(A), L).
+sdfc(alone(A)).
+fc(drunk(dionysus)).
+fc(sunny).
+fc(calm(A)).
+fc(right_handed(zeus)).
+
+ac(A^go).
+ac(rain).
+domain(A^go, L).
+domain(A^go, ff).
+pac(ChildOfZeus^drink).
+oblpac(zeus^thunderbolt^A) :-
+ A \= zeus,
+ A \= hera,
+ A \= cerberus.
+
+%%%%%%%%%%
+%%%%%%%%%% INERTIA AND EXOGENEITY
+
+inertial FC :-
+ fc(FC),
+ FC \= sunny.
+
+inertial sunny if calm(zeus).
+
+exogenous rain.
+exogenous A^go :- A \= dionysus.
+exogenous dionysus^go if calm(dionysus).
+exogenous dionysus^go if -drunk(dionysus).
+
+rigid right_handed(zeus).
+
+%%%%%%%%%%
+%%%%%%%%%% CAUSAL LAWS: Static
+
+caused calm(hera).
+caused loc(hera)=olympus if true.
+
+caused false if loc(dionysus)=olympus.
+caused false if loc(M)=olympus.
+
+caused false if loc(ChildOfZeus)=hades & loc(ChildOfZeus1)=hades :-
+ ChildOfZeus \= ChildOfZeus1.
+
+constraint loc(cerberus)=hades.
+
+default -alone(A).
+
+caused alone(A) if loc(A)=L & OthersNotAlone :-
+ findall(-(loc(X)=L), (agent(X), X \= A), List),
+ list_to_conj(List, OthersNotAlone).
+
+list_to_conj([X], X) :-
+ !.
+list_to_conj([H|T], (H & Rest)) :-
+ list_to_conj(T, Rest).
+
+%%%%%%%%%%
+%%%%%%%%%% CAUSAL LAWS: Fluent Dynamic
+
+caused sunny after -sunny & -calm(zeus).
+caused -sunny after sunny & -calm(zeus).
+
+caused -calm(M) after zeus^thunderbolt^M :-
+ M \= cerberus.
+nonexecutable zeus^thunderbolt^ChildOfZeus if loc(zeus)=hades.
+
+nonexecutable artemis^go=thrace.
+
+zeus^thunderbolt^ChildOfZeus causes calm(ChildOfZeus) if -calm(ChildOfZeus).
+zeus^thunderbolt^dionysus maycause -drunk(dionysus).
+
+default sunny after -calm(zeus).
+default -sunny after -calm(zeus).
+
+caused calm(zeus) after zeus^thunderbolt^ChildOfZeus.
+caused sunny after zeus^thunderbolt^dionysus & loc(artemis)=olympus.
+nonexecutable artemis^go=ff.
+nonexecutable zeus^go=L & dionysus^go=L1.
+
+%%%%%%%%%%
+%%%%%%%%%% CAUSAL LAWS: Action Dynamic
+
+caused artemis^go=olympus if loc(artemis)=hades.
+
+%%%%%%%%%%
+%%%%%%%%%% NORMS (nC+)
+
+local_global.
+
+notpermitted loc(artemis)=hades.
+notpermitted calm(zeus) if calm(hera).
+
+notpermitted rain.
+
+zeus notpermitted zeus^thunderbolt^dionysus if loc(artemis)=L & loc(dionysus)=L.
+
+%%%%%%%%%%
+%%%%%%%%%% POLICIES (pC+)
+
+% pdp_transparent.
+
+pol_abbrev(X > Y, X join ((neg (X join (not X))) meet Y) ).
+
+top ptop is ((p_artemis join p_dionysus) join p_thunderbolt).
+policy p_artemis is (p_artemis_neg > p_artemis_pos).
+
+p_dionysus @ {
+ ( perm(dionysus^drink) if -drunk(dionysus) ),
+ ( perm(dionysus^drink) if drunk(dionysus) & loc(dionysus)=hades )
+}.
+
+p_artemis_neg @ {
+ denied(artemis^drink) if -calm(artemis)
+}.
+
+p_artemis_pos @ {
+ perm(artemis^drink) if loc(artemis)=olympus
+}.
+
+p_thunderbolt @ {
+ perm(zeus^thunderbolt^ChildOfZeus) if rain
+}.
+
+caused obl(zeus^thunderbolt^dionysus) if drunk(dionysus) & loc(dionysus)=thrace.
+
+%%%%%%%%%%
+%%%%%%%%%% RECOMMENDED SETTINGS
+
+% limit number of solutions shown to queries to 5,000
+
+:- set_opt(num_models, 5000).
+
+%%%%%%%%%%
+%%%%%%%%%% QUERIES
+
+query(thunder(X), 1, [0:zeus^thunderbolt^X]) :-
+ oblpac(zeus^thunderbolt^X).
+

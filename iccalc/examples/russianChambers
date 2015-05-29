@@ -1,0 +1,92 @@
+/* Russian Roulette with chambers
+
+load means insert bullet and spin, or 
+just spin if already loaded
+
+Added: nonexecutable load if loaded
+
+The structure and some of the fluents are based
+on the non-deterministic version
+*/
+
+chambers(36).
+
+N :: chambers(Max), generate_integer(1,Max,N).  %% works
+
+% equivalent to
+%   N :: chamber(N). 
+%   chamber(N) :- chambers(Max), generate_integer(1,Max,N).
+% No! Equivalent to:
+%   N :: chamber(N). 
+%   chamber(NN) :- chambers(Max), generate_integer(1,Max,NN).
+
+
+fc(alive).
+fc(bullet).
+
+domain(bullet, N).
+domain(bullet, none).
+
+sdfc(loaded).
+sdfc(primed).
+
+inertial alive.
+inertial bullet.
+
+default -primed.
+caused primed if bullet=1.
+
+default loaded.
+caused -loaded if bullet=none.
+
+% inertial loaded.
+% inertial primed.
+% 
+% caused false if primed & -loaded.
+
+
+ac(load).
+ac(shoot).
+
+exogenous load.
+exogenous shoot.
+
+
+nonexecutable load & shoot.
+nonexecutable -load & -shoot.
+
+
+% for genuine Russian Roulette
+
+nonexecutable load if -alive.
+nonexecutable shoot if -alive.
+
+% so no transitions from -alive states
+
+nonexecutable load if loaded.  % reduces transitions
+
+
+
+%%%
+
+load maycause bullet=N.
+
+caused false if bullet=none after load.
+
+shoot causes -alive if primed.
+
+shoot causes bullet=N1 if bullet=N :- N > 1, N1 is N-1.
+shoot causes bullet=none if bullet=1.
+
+
+% ------------------
+
+/*
+project load.
+project shoot.
+project alive.
+project loaded.
+project primed.
+*/
+
+

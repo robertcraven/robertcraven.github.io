@@ -1,0 +1,45 @@
+
+%%%%%
+%%%%% SIGNATURE
+
+A,A1 :: agent(A).
+L,L1 :: location(L).
+
+agent(emerson).
+agent(thoreau).
+
+location(harvard).
+location(walden).
+
+fc(loc(A)).
+fc(pleased(A)).
+fc(turbulent(A)).
+domain(loc(A), L).
+
+ac(A^move).
+ac(A^writeTo^A1) :-
+ A \= A1.
+
+domain(A^move, L).
+domain(A^move, ff).
+
+%%%%%
+%%%%% SYSTEM
+
+caused loc(A)=L after A^move=L.
+nonexecutable A^move=L if loc(A)=L.
+
+caused pleased(A1) after A^writeTo^A1 :-
+ A \= A1.
+caused -turbulent(A) after A^writeTo^A1 :-
+ A \= A1.
+
+%%
+
+inertial FC :-
+ fc(FC).
+exogenous(AC) :-
+ ac(AC).
+
+
+

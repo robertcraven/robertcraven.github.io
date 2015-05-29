@@ -1,0 +1,29 @@
+
+% Action description AS1, Section 3.2
+% See http://www.doc.ic.ac.uk/~rac101/iccalc/pna.pdf
+
+subject(left).
+subject(right).
+
+act(read).
+
+target(file).
+
+%%
+
+fc(S:hasRead(file)) :-
+ subject(S).
+
+ac(S:read:file) :-
+ subject(S).
+
+%%
+
+caused S:hasRead(file) after S:read:file :-
+ subject(S).
+
+inertial FC :-
+ fc(FC).
+
+exogenous AC :-
+ ac(AC).

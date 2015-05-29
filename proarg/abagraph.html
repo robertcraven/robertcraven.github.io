@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+ <head>
+  <title>proxdd and grapharg</title>
+  <meta name="description" content="proxdd,grapharg,prolog,argumentation,aba" />
+    <link href="http://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet" type="text/css" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+  <div id="container">
+   <div id="header">
+    <h1>abagraph</h1>
+   </div>
+   <div id="navbar">
+    <a href="./index.html">about</a>&nbsp;/&nbsp;
+    <a href="./proxdd.html">proxdd</a>&nbsp;/&nbsp;
+    <a href="./abagraph.html" class="current">abagraph</a>&nbsp;/&nbsp;
+    <a href="./grapharg.html">grapharg</a>
+   </div>
+   <div id="content">
+   <h2>Requirements</h2>
+    <p>
+     The code has been tested using SICStus Prolog (4.2+) on Linux.
+     To use the optional visualization of solutions, you also need
+     <a href="http://www.graphviz.org/">graphviz</a>.
+    </p>
+    <h2>Installation</h2>
+    <p>
+     Download the source:
+     <a href="./abagraph.tar.gz">abagraph.tar.gz</a>.
+     Unzip and untar it somewhere.  Make sure the BASH <b>abagraph</b> script from 'scripts/'
+     is somewhere in your PATH.  Edit two variables at the top of the script to point to
+     the right places.
+    </p>
+    <h2>Invocation</h2>
+    <p>
+     If you've followed the directions for the script, above, you can do either:
+    </p>
+    <ul>
+     <li>% abagraph&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR</li>
+     <li>% abagraph source.pl</li>
+    </ul>
+    <p>
+     where 'source.pl' is the name of a Prolog source file for the ABA framework.
+     Alternatively, you can go to the 'code/' directory, load prolog, and just do:
+    </p>
+    <ul>
+     <li>?- [abagraph].&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR</li>
+     <li>?- compile(abagraph).</li>
+    </ul>
+    <h2>Basic Usage</h2>
+    <p>
+     Once <b>abagraph</b> is loaded, you can (re)load a source file (named 'source.pl') using:
+    </p>
+    <ul>
+     <li>?- loadf(source).</li>
+    </ul>
+    <p>
+     To find a derivation for the sentence 's', do:
+    </p>
+    <ul>
+     <li>?- derive(s, X).</li>
+    </ul>
+    <p>
+     The solution will be printed on screen, and 'X' bound to an internal representation of it.
+     Printed on screen is the Proponent argument graph (PGRAPH), the defence set (DEFENCE),
+     the set of Opponent argument graphs (OPGRAPHS), and the culprits (CULPRITS).
+    </p>
+    <p>
+     Doing
+    </p>
+    <ul>
+     <li>?- help.</li>
+    </ul>
+    <p>
+     prints some usage information.
+    </p>
+    <h2>Options</h2>
+    <p>
+     Current values of options are displayed by:
+    </p>
+    <ul>
+     <li>?- options.</li>
+    </ul>
+    <p>
+     To print the derivation steps during a call to sxdd/2, use:
+    </p>
+    <ul>
+     <li>?- set_verbose.</li>
+    </ul>
+    <p>
+     To hide the derivation steps (default), use:
+    </p>
+    <ul>
+     <li>?- set_quiet.</li>
+    </ul>
+    <p>
+     To output the solutions, as found, to a '.dot' file for visualization
+     with graphviz, use:
+    </p>
+    <ul>
+     <li>?- set_print.</li>
+    </ul>
+    <p>
+     To set not to print, use:
+    </p>
+    <ul>
+     <li>?- set_noprint.</li>
+    </ul>
+    <p>
+     To use AB-dispute derivations, do:
+    </p>
+    <ul>
+     <li>?- set_ab.</li>
+    </ul>
+    <p>
+     To use GB-dispute derivations, do:
+    </p>
+    <ul>
+     <li>?- set_gb.</li>
+    </ul>
+    <p>
+     To change strategies, use:
+    </p>
+    <ul>
+     <li>?- set_strategies(StratList).</li>
+    </ul>
+    <p>
+     StratList has the form: [T,OJ,PS,OS,PR].
+    </p>
+    <p>
+     turn choice (T):
+    </p>
+    <ul>
+     <li>p - proponent priority [DEFAULT]</li>
+     <li>o - opponent priority</li>
+     <li>s - smallest number of sentences/justification-pairs first</li>
+    </ul>
+    <p>
+     opponent justification set choice:
+    </p>
+    <ul>
+     <li>n - newest</li>
+     <li>o - oldest</li>
+     <li>s - smallest set of pending (unmarked) sentences [DEFAULT]</li>
+     <li>l - largest set of pending (unmarked) sentences</li>
+     <li>lmb - lowest maximum 'branching' coefficient</li>
+    </ul>
+    <p>
+     sentence choice (proponent PS, and opponent OS):
+    </p>
+    <ul>
+     <li>n - newest</li>
+     <li>o - oldest</li>
+     <li>e - eager (choose an assumption if possible)</li>
+     <li>p - patient (choose non-assumption if poss.)  [DEFAULT (prop and opp)]</li>
+     <li>be - sentence with smallest 'branching' coefficient (eager)</li>
+     <li>bp - sentence with smallest 'branching' coefficient (patient)</li>
+    </ul>
+    <p>
+     proponent rule choice (PR):
+    </p>
+    <ul>
+     <li>s - smallest rule body first</li>
+     <li>l1 - look-ahead, 1-step  [DEFAULT]</li>
+    </ul>
+    <h2>Example</h2>
+    <p>
+     The source file <b>toni6_2.pl</b> is included in the distribution.  A query
+     of 'derive(p, X)' writes the solution to screen:
+    </p>
+    <table>
+     <tr>
+      <td>PGRAPH:</td>
+      <td>[a-[],p-[a,u],u-[a]]</td>
+     </tr>
+     <tr>
+      <td>DEFENCE:</td>
+      <td>[a]</td>
+     </tr>
+     <tr>
+      <td>OGRAPHS:</td>
+      <td>[q-[]-[c,q,s]-[c-[],q-[c,s],s-[]],</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td>&nbsp;q-[d]-[c,q,t]-[c-[],d-[],q-[c,t],t-[d]],</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td>&nbsp;q-[e]-[c,q,t]-[c-[],e-[],q-[c,t],t-[e]]]</td>
+     </tr>
+     <tr>
+      <td>CULPRITS:</td>
+      <td>[c]</td>
+     </tr>
+    </table>
+    <p>
+     When visualized using graphviz, this is:<br />
+     <img src="./s.jpg" alt="dot solution" width="468px" /><br />
+     Proponent argument graph shaded blue; marked Opponent argument graphs shaded grey;
+     unmarked (non-empty unmarked support) Opponent argument graphs shaded white.
+     Defence set green. Culprits yellow. Attacks in red.
+    </p>
+   </div>
+   <div id="footer">
+    Robert Craven,
+    <a href="mailto:robert.craven@imperial.ac.uk">robert.craven@imperial.ac.uk</a>
+   </div>
+  </div>
+ </body>
+</html>

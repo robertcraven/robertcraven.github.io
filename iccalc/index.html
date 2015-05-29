@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+ <head>
+  <title>iCCalc and mcLUCA</title>
+  <meta name="description" content="iCCalc" />
+  <link href="http://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet" type="text/css" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+  <div id="container">
+   <div id="header">
+    <h1>iCCalc&nbsp;&nbsp;and&nbsp;&nbsp;mcLUCA</h1>
+   </div>
+   <div id="navbar">
+    <a href="./index.html" class="current">About</a>&nbsp;/&nbsp;
+    <a href="./download.html">Download</a>&nbsp;/&nbsp;
+    <a href="./tutorial.html">Tutorial</a>
+   </div>
+   <div id="content">
+    <h3>iCCalc</h3>
+    <p>
+     iCCalc is an open-source Prolog program for various kinds of
+     reasoning tasks using the action language C+. (For details of C+, see
+     the paper
+     <a href="http://www.cs.utexas.edu/users/vl/papers/nmct.ps">Nonmonotonic
+     Causal Theories</a> by Giunchiglia, Lee, Lifschitz, McCain and Turner.)
+     C+ is a
+     formalism for reasoning about the effects of actions on systems which
+     evolve over time. C+ has very natural support for concurrent actions,
+     various forms of default including default persistence, non-determinism,
+     and other features of domains common in the literature on knowledge
+     representation.
+    </p>
+    <p>
+     We have made a number of additions to the C+ language, in order to enable
+     a more convenient representation of deontic properties, multiple agents,
+     policies, and interactions which are temporally distant. These additions
+     are described in the papers:
+    </p>
+    <ul>
+     <li><a href="http://dx.doi.org/10.1016/j.jal.2007.06.007">Agent Strands in the Action Language nC+</a>
+         (Craven, Sergot)</li>
+     <li><a href="http://dx.doi.org/10.1007/11786849_19">The Deontic Component of Action Language nC+</a>
+         (Sergot, Craven)</li>
+     <li><a href="http://dx.doi.org/10.1007/s11225-005-0495-8">Distant Causation in C+</a>
+         (Craven, Sergot)</li>
+     <li><a href="./pna.pdf">Policies, Norms and Actions: Groundwork for a Framework</a> 
+         (Craven)</li>
+    </ul>
+    <p>
+     Further additions to the language, in papers shortly to be published,
+     provide support for policies; these are different from norms, as the
+     examples we provide will illustrate.
+    </p>
+    <p>
+     C+ was originally implemented using the 'Causal Calculator' CCalc. We
+     have reimplemented it, adding support for all the language extensions
+     referred to above, as well as a number of other features such as the
+     visualization of labelled transition systems, a more powerful syntax for
+     action description definitions, and the ability to be used in all main
+     dialects of Prolog. Our new implementation is called iCCalc, and can
+     be downloaded
+     <a href="./download.html">here</a>.
+    </p>
+    <h3>mcLUCA</h3>
+    <p>
+     mcLUCA is a model-checker for properties of action and agency over
+     transition systems specified in C+. The properties are expressed in
+     the 'Logic of Unwitting Collective Agency'. This logic, known as LUCA,
+     is described in the papers:
+    </p>
+    <ul>
+     <li><a href="http://www.doc.ic.ac.uk/research/technicalreports/2008/DTR08-6.pdf">The logic of unwitting collective agency</a>
+         (Sergot)</li>
+     <li><a href="http://dx.doi.org/10.1007/978-3-540-87654-0_1">Agency and Action in Norm-Governed Multi-agent Systems</a>
+         (Sergot)</li>
+    </ul>  
+    <p>
+     LUCA enables the expression of a number of different concepts of
+     individual and collective agency, depending on the degree to which
+     an agent contributes to bringing about some change. The implementation
+     is also in Prolog and uses iCCalc. For information on mcLUCA and
+     downloading it, email the authors.
+    </p>
+    <h3>Authors</h3>
+    <p>
+     iCCalc and mcLUCA were written by
+     <a href="http://www.doc.ic.ac.uk/~mjs/">Marek Sergot</a>
+     and
+     <a href="http://www.doc.ic.ac.uk/~rac101/">Robert Craven</a>,
+     in the
+     <a href="http://www3.imperial.ac.uk/computing/">Department of Computing</a>,
+     Imperial College London.
+    </p>
+   </div>
+   <div id="footer">
+    Robert Craven,
+    <a href="mailto:robert.craven@imperial.ac.uk">robert.craven@imperial.ac.uk</a>,
+    and
+    Marek Sergot,
+    <a href="mailto:m.sergot@imperial.ac.uk">m.sergot@imperial.ac.uk</a>
+   </div>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,17 @@
+
+% Action description (4) from Section 2.1.
+% See http://www.doc.ic.ac.uk/~rac101/iccalc/pna.pdf
+
+fc(p).
+fc(q).
+
+ac(a).
+
+caused q if p.
+caused -q if -p.
+
+caused p after a.
+caused -p after -a.
+
+caused a if a.
+caused -a if -a.
