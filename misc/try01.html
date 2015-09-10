@@ -2,14 +2,13 @@
 <meta charset="utf-8">
 <style>
 
-.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
+.link {
+  stroke: #ccc;
 }
 
-.link {
-  stroke: #999;
-  stroke-opacity: .6;
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
 }
 
 </style>
@@ -18,7 +17,7 @@
 <script>
 
 var width = 960,
-    height = 500;
+    height = 500
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -49,6 +48,13 @@ d3.json("graph.json", function(error, json) {
       .attr("class", "node")
       .call(force.drag);
 
+  node.append("image")
+      .attr("xlink:href", "https://github.com/favicon.ico")
+      .attr("x", -8)
+      .attr("y", -8)
+      .attr("width", 16)
+      .attr("height", 16);
+
   node.append("text")
       .attr("dx", 12)
       .attr("dy", ".35em")
@@ -67,4 +73,3 @@ d3.json("graph.json", function(error, json) {
 </script>
 </body>
 </html>
-
