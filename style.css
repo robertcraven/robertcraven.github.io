@@ -13,7 +13,7 @@ body {
  font-weight:400;
  margin:40px auto 80px;
  padding:0 60px 0;
- width:1080px; }
+ width:1040px; }
 div#h {
  margin:0 auto;
  border-bottom:1px solid #f9d8ae;
@@ -22,7 +22,7 @@ div#l {
  float:left;
  margin:0;
  padding:0 0 80px; 
- width:680px; }
+ width:640px; }
 div#r {
  float:right;
  margin:0;
@@ -41,11 +41,11 @@ h2 {
  font-size:30px;
  font-style:italic;
  font-weight:400;
- padding:24px 0 0; }
+ padding:20px 0 0; }
 img {
  border:0;
  margin:0;
- padding:20px 0 10px; }                
+ padding:24px 0 0; }                
 li {
  line-height:1.5;
  margin:0;
