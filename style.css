@@ -31,14 +31,14 @@ div#r {
 h1,h2 {
  background-color:#30373f;
  color:#f9d8ae;
- font-family:"Cormorant Garamond",serif;
+ font-family:"Cardo",serif;
  font-weight:400;
  margin:0; }
 h1 {
- font-size:48px;
+ font-size:40px;
  padding:20px 0 10px; }
 h2 {
- font-size:28px;
+ font-size:24px;
  font-style:italic;
  padding:20px 0 0; }
 img {
