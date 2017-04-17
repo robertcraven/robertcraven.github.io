@@ -1,11 +1,29 @@
 @font-face {
  font-family:Garamond;
- src: url("./fonts/adobegaramondproregular.otf") format("opentype");
+ src: url("./fonts/agpr_subset.otf") format("opentype");
 }
 @font-face {
  font-family:"Garamond Italic";
  font-weight:italic;
- src: url("./fonts/adobegaramondproitalic.otf") format("opentype");
+ src: url("./fonts/agpi_subset.otf") format("opentype");
+}
+@font-face {
+ font-family: 'Cardo';
+ font-style: normal;
+ font-weight: 400;
+ src: local('Cardo'),
+      local('Cardo-Regular'),
+      url(https://fonts.gstatic.com/l/font?kit=Qet1VFLxymNR5RKeCySaeXbZZCZYaODmY_PmiYRAon4&skey=6e473b3c3fa37289&v=v8)
+      format('woff2');
+}
+@font-face {
+ font-family: 'Cardo';
+ font-style: italic;
+ font-weight: 400;
+ src: local('Cardo Italic'),
+      local('Cardo-Italic'),
+      url(https://fonts.gstatic.com/l/font?kit=3vWn7cpZnySpNSWCTbfGNmu3APxa00MNrpadJiv_PRvUugWnRXKKb_doRtixTs0V&skey=26bb5df469a255da&v=v8)
+      format('woff2');
 }
 a:link,
 a:visited {
