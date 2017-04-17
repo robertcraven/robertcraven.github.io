@@ -58,8 +58,7 @@ div#r {
 h1,h2 {
  background-color:#30373f;
  color:#f9d8ae;
- font-family:"Cardo",serif;
- font-weight:400;
+ font-weight:normal;
  margin:0; }
 h1 {
  font-family:Garamond,Cardo,serif;
