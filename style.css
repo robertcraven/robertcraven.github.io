@@ -1,3 +1,12 @@
+@font-face {
+ font-family:Garamond;
+ src: url("./fonts/adobegaramondproregular.otf") format("opentype");
+}
+@font-face {
+ font-family:"Garamond Italic";
+ font-weight:italic;
+ src: url("./fonts/adobegaramondproitalic.otf") format("opentype");
+}
 a:link,
 a:visited {
  background-color:#30373f;
@@ -35,9 +44,11 @@ h1,h2 {
  font-weight:400;
  margin:0; }
 h1 {
- font-size:40px;
+ font-family:Garamond,Cardo,serif;
+ font-size:42px;
  padding:20px 0 10px; }
 h2 {
+ font-family:"Garamond Italic",Cardo,serif;
  font-size:24px;
  font-style:italic;
  padding:20px 0 0; }
