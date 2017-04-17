@@ -8,22 +8,22 @@
  src: url("./fonts/agpi_subset.otf") format("opentype");
 }
 @font-face {
- font-family: 'Cardo';
- font-style: normal;
- font-weight: 400;
+ font-family:'Cardo';
+ font-style:normal;
+ font-weight:400;
  src: local('Cardo'),
       local('Cardo-Regular'),
-      url(https://fonts.gstatic.com/l/font?kit=Qet1VFLxymNR5RKeCySaeXbZZCZYaODmY_PmiYRAon4&skey=6e473b3c3fa37289&v=v8)
+      url(https://fonts.gstatic.com/l/font?kit=UjiIFo5CDW99yG-0k79inAYS0JbSrlPpAcQAgKgKHWH1HvXlES81UXPmZpDdECMy-69iVRnGNYm5aggVh3xlWz1UZEmZdoo1J3RQbpcejgQ&skey=6e473b3c3fa37289&v=v8)
       format('woff2');
 }
 @font-face {
- font-family: 'Cardo';
- font-style: italic;
- font-weight: 400;
- src: local('Cardo Italic'),
-      local('Cardo-Italic'),
-      url(https://fonts.gstatic.com/l/font?kit=3vWn7cpZnySpNSWCTbfGNjU5DgJ-WdFvoV38SEMFXMPUugWnRXKKb_doRtixTs0V&skey=26bb5df469a255da&v=v8)
-      format('woff2');
+  font-family:'Cardo';
+  font-style:italic;
+  font-weight:400;
+  src: local('Cardo Italic'),
+       local('Cardo-Italic'),
+       url(https://fonts.gstatic.com/l/font?kit=LtXPQw8t1H_8PlO6hCzAfyFTrk6uD5WweKEyyAIT3Lj0SGmKokOP2WdBqrbj1AQ55RA8htVOKoTC4wIMmGrJKqHRtl5r2wpxFuH0WyHXW48&skey=26bb5df469a255da&v=v8)
+       format('woff2');
 }
 a:link,
 a:visited {
