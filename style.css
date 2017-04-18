@@ -4,7 +4,7 @@
 }
 @font-face {
  font-family:"Garamond Italic";
- font-weight:italic;
+ font-style:italic;
  src: url("./fonts/agpi_subset.otf") format("opentype");
 }
 @font-face {
