@@ -47,13 +47,13 @@ div#h {
  padding:0; }
 div#l {
  float:left;
- margin:0;
- padding:0 0 80px; 
+ margin:8px 0 80px; 
+ padding:0;
  width:640px; }
 div#r {
  float:right;
- margin:0;
- padding:0 0 80px;   
+ margin:8px 0 80px; 
+ padding:0;  
  width:400px; }
 h1,h2,h3 {
  background-color:#30373f;
