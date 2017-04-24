@@ -25,6 +25,7 @@
        url(https://fonts.gstatic.com/l/font?kit=LtXPQw8t1H_8PlO6hCzAfyFTrk6uD5WweKEyyAIT3Lj0SGmKokOP2WdBqrbj1AQ55RA8htVOKoTC4wIMmGrJKqHRtl5r2wpxFuH0WyHXW48&skey=26bb5df469a255da&v=v8)
        format('woff2');
 }
+
 a:link,
 a:visited {
  background-color:#30373f;
@@ -78,7 +79,15 @@ h3 {
 img {
  border:0;
  margin:24px 0 0;
- padding:0; }                
+ padding:0; }
+input {
+ background-color:#30373f;
+ border:1px solid white;
+ color:#fff;
+ font-family:"Open Sans",sans-serif;
+ font-size:13px;
+ margin:0px 2px 0px;
+ padding:2px 5px 2px; }               
 li {
  margin:0 0 5px;
  padding:0; }
