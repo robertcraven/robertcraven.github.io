@@ -108,11 +108,12 @@ table {
  background-color:#30373f;
  color:#f9d8ae;
  font-size:12px;
- margin-left:50px 0 0 100px; }
+ margin:50px 0 0;
+ padding:0; }
 td {
  background-color:#30373f;
  color:#f9d8ae;
- padding-right:80px;
+ padding-right:60px;
  vertical-align:top; }
 ul {
  list-style-type:none;
