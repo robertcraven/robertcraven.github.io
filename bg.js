@@ -1,6 +1,5 @@
-
-var totalCount = 17;
-function ChangeIt() 
+var totalCount = 15;
+function ChangeIt()
 {
  var num = Math.floor(Math.random() * (totalCount + 1));
  if (num < 10) {
@@ -9,4 +8,3 @@ function ChangeIt()
   document.body.background = 'bgimages/'+num+'.jpg';
  }
 }
-
