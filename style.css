@@ -42,6 +42,13 @@ body {
  margin:48px auto 80px;
  padding:0 60px 0;
  width:1040px; }
+div#fourohfour {
+ left: 50%;
+ padding:0;
+ position: fixed;
+ top: 50%;
+ transform: translate(-50%, -50%);
+}
 div#h {
  margin:0 auto;
  border-bottom:1px solid #f9d8ae;
@@ -76,6 +83,13 @@ h3 {
  font-style:normal;
  margin:12px 0 10px;
  text-transform:uppercase; }
+html#fourohfour { 
+ background: url(piranesi.jpg) no-repeat center center fixed; 
+ -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+ background-size: cover;
+}
 img {
  border:0;
  margin:24px 0 0;
@@ -102,6 +116,17 @@ p {
  margin:10px 0 15px;
  max-width:620px;
  padding:0; }
+p.fourohfour {
+ background-color:#fff;
+ border:4px;
+ border-style: solid;
+ color:#000;
+ font-family:Cardo,serif;
+ font-size:34px;
+ line-height:1;
+ margin:0;
+ padding:10px 20px 8px;
+}
 span {
  color:#f9d8ae; }
 table {
