@@ -4,16 +4,41 @@
  <head>
  <link href="https://fonts.googleapis.com/css?family=Cardo" rel="stylesheet">
  <title>Nothing</title>
- <link rel="stylesheet" type="text/css" href="style.css" />
- <script type="text/javascript" src="bg.js"></script>
  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+ <style>
+  body {
+   background-image:url("wallgust.jpg");
+   background-repeat:no-repeat;
+   background-position: center center;
+   background-attachment:fixed;
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+  }
+ div {
+  left: 50%;
+  padding:0;
+  position: fixed;
+  top: 20%;
+  transform: translate(-50%, -50%);
+ }
+ p {
+  background-color:#fff;
+  border:4px;
+  border-style: solid;
+  color:#000;
+  font-family:Cardo,serif;
+  font-size:26px;
+  line-height:1;
+  margin:0;
+  padding:11px 20px 12px;
+ }
+ </style>
  </head>
- <body id="fourohfour">
-  <div id="fourohfour">
-   <p class="fourohfour">What you&#8217;re looking for isn&#8217;t here.</p>
+ <body>
+  <div>
+   <p>Error 404: what you&#8217;re looking for isn&#8217;t here.</p>
   </div>
  </body>
- <script type="text/javascript"> 
-  ChangeIt();
- </script> 
 </html>
