@@ -42,32 +42,16 @@ body {
  margin:48px auto 80px;
  padding:0 60px 0;
  width:1040px; }
-body#fourohfour {
- background-repeat:no-repeat;
- background-position: center center;
- background-attachment:fixed;
- -webkit-background-size: cover;
- -moz-background-size: cover;
- -o-background-size: cover;
- background-size: cover;
-}
-div#fourohfour {
- left: 50%;
- padding:0;
- position: fixed;
- top: 30%;
- transform: translate(-50%, -50%);
-}
-div#h {
+div#head {
  margin:0 auto;
  border-bottom:1px solid #f9d8ae;
  padding:0; }
-div#l {
+div#pubs {
  float:left;
  margin:8px 0 80px; 
  padding:0;
- width:640px; }
-div#r {
+ width:550px; }
+div#about {
  float:right;
  margin:8px 0 80px; 
  padding:0;  
@@ -118,17 +102,6 @@ p {
  margin:10px 0 15px;
  max-width:620px;
  padding:0; }
-p.fourohfour {
- background-color:#fff;
- border:4px;
- border-style: solid;
- color:#000;
- font-family:Cardo,serif;
- font-size:34px;
- line-height:1;
- margin:0;
- padding:11px 20px 12px;
-}
 span {
  color:#f9d8ae; }
 table {
